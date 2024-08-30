@@ -2,7 +2,8 @@ package br.com.iouone.pagamento.services.impl;
 
 import br.com.iouone.pagamento.repositories.AssinaturaRepository;
 import br.com.iouone.pagamento.requests.AssinaturaCancelRequest;
-import br.com.iouone.pagamento.requests.AssinaturaRequest;
+import br.com.iouone.pagamento.requests.AssinaturaCartaoRequest;
+import br.com.iouone.pagamento.requests.AssinaturaPixRequest;
 import br.com.iouone.pagamento.requests.AssinaturaUpdateRequest;
 import br.com.iouone.pagamento.responses.AssinaturaResponse;
 import br.com.iouone.pagamento.services.AssinaturaService;
@@ -17,7 +18,7 @@ public class AssinaturaServiceImpl implements AssinaturaService {
         this.assinaturaRepository = assinaturaRepository;
     }
 
-    public AssinaturaResponse createAssinatura(AssinaturaRequest request) {
+    public AssinaturaResponse createAssinaturaCartao(AssinaturaCartaoRequest request) {
         return null;
     }
 
@@ -30,6 +31,11 @@ public class AssinaturaServiceImpl implements AssinaturaService {
     }
 
     public AssinaturaResponse cancelAssinatura(AssinaturaCancelRequest request) {
+        return null;
+    }
+
+    @Override
+    public AssinaturaResponse createAssinaturaPix(AssinaturaPixRequest request) {
         return null;
     }
 }

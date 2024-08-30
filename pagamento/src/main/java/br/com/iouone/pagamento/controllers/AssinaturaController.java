@@ -1,7 +1,8 @@
 package br.com.iouone.pagamento.controllers;
 
 import br.com.iouone.pagamento.requests.AssinaturaCancelRequest;
-import br.com.iouone.pagamento.requests.AssinaturaRequest;
+import br.com.iouone.pagamento.requests.AssinaturaCartaoRequest;
+import br.com.iouone.pagamento.requests.AssinaturaPixRequest;
 import br.com.iouone.pagamento.requests.AssinaturaUpdateRequest;
 import br.com.iouone.pagamento.responses.AssinaturaResponse;
 import br.com.iouone.pagamento.responses.PagamentoResponse;
@@ -19,7 +20,6 @@ import java.util.List;
 @RequestMapping("/api/v1/assinaturas")
 @CrossOrigin
 public class AssinaturaController {
-
     private final AssinaturaServiceImpl assinaturaService;
     private final PagamentoService pagamentoService;
 
@@ -29,9 +29,15 @@ public class AssinaturaController {
         this.pagamentoService = pagamentoService;
     }
 
-    @PostMapping
-    public ResponseEntity<AssinaturaResponse> criarAssinatura(@Valid @RequestBody AssinaturaRequest request) {
-        AssinaturaResponse assinatura = assinaturaService.createAssinatura(request);
+    @PostMapping("/cartoes")
+    public ResponseEntity<AssinaturaResponse> criarAssinatura(@Valid @RequestBody AssinaturaCartaoRequest request) {
+        AssinaturaResponse assinatura = assinaturaService.createAssinaturaCartao(request);
+        return new ResponseEntity<>(assinatura, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/pix")
+    public ResponseEntity<AssinaturaResponse> criarAssinatura(@Valid @RequestBody AssinaturaPixRequest request) {
+        AssinaturaResponse assinatura = assinaturaService.createAssinaturaPix(request);
         return new ResponseEntity<>(assinatura, HttpStatus.CREATED);
     }
 
