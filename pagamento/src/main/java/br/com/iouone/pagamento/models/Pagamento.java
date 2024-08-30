@@ -17,7 +17,6 @@ public class Pagamento {
     private BigDecimal amount;
     private LocalDateTime paymentDate;
     private String status;
-
     @ManyToOne
     private Assinatura assinatura;
 
