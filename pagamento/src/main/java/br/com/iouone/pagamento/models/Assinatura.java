@@ -21,7 +21,6 @@ public class Assinatura {
     private LocalDateTime startAt;
     private int installments;
     private String status;
-
     @OneToOne
     private ItemAssinatura itemAssinatura;
 
