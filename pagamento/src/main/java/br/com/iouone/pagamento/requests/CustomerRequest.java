@@ -1,6 +1,8 @@
 package br.com.iouone.pagamento.requests;
 
 public class CustomerRequest {
+
+    private Integer id;
     private String name;
     private String email;
     private String document;
@@ -20,6 +22,14 @@ public class CustomerRequest {
         this.gender = gender;
         this.birthdate = birthdate;
         this.celular = celular;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
