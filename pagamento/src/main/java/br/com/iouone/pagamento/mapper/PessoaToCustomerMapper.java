@@ -1,8 +1,8 @@
 package br.com.iouone.pagamento.mapper;
 
-
 import br.com.iouone.pagamento.models.Customer;
 import br.com.iouone.pagamento.requests.CustomerRequest;
+import br.com.iouone.pagamento.requests.MobilePhoneRequest;
 import br.com.iouone.pagamento.requests.PhoneRequest;
 
 public class PessoaToCustomerMapper {
@@ -19,17 +19,20 @@ public class PessoaToCustomerMapper {
         String celular = customerRequest.getCelular();
         System.out.println("Celular recebido: " + celular);
 
-        if (celular != null && !celular.isEmpty()) {
-            PhoneRequest phoneDTO = new PhoneRequest();
-            phoneDTO.setCountry_code(celular.substring(0, 2));  // Código do país
-            phoneDTO.setArea_code(celular.substring(2, 4));     // Código de área
-            phoneDTO.setNumber(celular.substring(4));          // Número
+        if (celular != null && celular.length() == 13) {
+            String countryCode = celular.substring(0, 2);
+            String areaCode = celular.substring(2, 4);
+            String number = celular.substring(4);
+
+            MobilePhoneRequest mobilePhone = new MobilePhoneRequest(countryCode, areaCode, number);
+            PhoneRequest phoneDTO = new PhoneRequest(mobilePhone);
             customer.setPhone(phoneDTO);
             System.out.println("Telefone configurado: " + phoneDTO);
         } else {
             customer.setPhone(null);
-            System.out.println("Telefone não configurado, valor null");
+            System.out.println("Telefone não configurado, valor null ou formato inválido");
         }
+
         return customer;
     }
 }
