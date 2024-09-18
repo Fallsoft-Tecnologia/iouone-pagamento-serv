@@ -3,16 +3,23 @@ package br.com.iouone.pagamento.services;
 import br.com.iouone.pagamento.mapper.PessoaToCustomerMapper;
 import br.com.iouone.pagamento.models.Customer;
 import br.com.iouone.pagamento.requests.CustomerRequest;
+import br.com.iouone.pagamento.requests.CustomerIdMessageRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.Base64;
 
 @Service
 public class ClienteService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
+
     private final PagarmeClient pagarmeClient;
+    private final RabbitTemplate rabbitTemplate;
 
     @Value("${pagarme.api.username}")
     private String username;
@@ -20,8 +27,9 @@ public class ClienteService {
     @Value("${pagarme.api.password}")
     private String password;
 
-    public ClienteService(PagarmeClient pagarmeClient) {
+    public ClienteService(PagarmeClient pagarmeClient, RabbitTemplate rabbitTemplate) {
         this.pagarmeClient = pagarmeClient;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     private String getAuthorizationHeader() {
@@ -36,8 +44,12 @@ public class ClienteService {
 
         if (response.getStatusCode().is2xxSuccessful()) {
             Customer createdCustomer = response.getBody();
-            // Armazena o ID do cliente e retorna como ResponseEntity
             if (createdCustomer != null) {
+                // Enviar o ID do cliente para o microservice de Cliente
+                CustomerIdMessageRequest message = new CustomerIdMessageRequest(customerRequest.getId(), createdCustomer.getId());
+                logger.info("Enviando mensagem para a fila com PessoaId: {} e CustomerId: {}", customerRequest.getId(), createdCustomer.getId());
+                rabbitTemplate.convertAndSend("receiving_customer_id_queue", message);
+
                 return ResponseEntity.ok(createdCustomer.getId());
             } else {
                 return ResponseEntity.status(500).body("Cliente criado, mas resposta está vazia.");
