@@ -4,6 +4,7 @@ import br.com.iouone.pagamento.mapper.PessoaToCustomerMapper;
 import br.com.iouone.pagamento.models.Customer;
 import br.com.iouone.pagamento.requests.CustomerRequest;
 import br.com.iouone.pagamento.requests.CustomerIdMessageRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,13 +40,21 @@ public class ClienteService {
 
     public ResponseEntity<String> criarCliente(CustomerRequest customerRequest) {
         Customer customer = PessoaToCustomerMapper.toCustomer(customerRequest);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String customerJson = objectMapper.writeValueAsString(customer);
+            logger.info("JSON do cliente a ser enviado para o Pagar.me: {}", customerJson);
+        } catch (Exception e) {
+            logger.error("Erro ao converter cliente para JSON", e);
+        }
+
         String authorizationHeader = getAuthorizationHeader();
         ResponseEntity<Customer> response = pagarmeClient.criarCliente(authorizationHeader, customer);
 
         if (response.getStatusCode().is2xxSuccessful()) {
             Customer createdCustomer = response.getBody();
             if (createdCustomer != null) {
-                // Enviar o ID do cliente para o microservice de Cliente
                 CustomerIdMessageRequest message = new CustomerIdMessageRequest(customerRequest.getId(), createdCustomer.getId());
                 logger.info("Enviando mensagem para a fila com PessoaId: {} e CustomerId: {}", customerRequest.getId(), createdCustomer.getId());
                 rabbitTemplate.convertAndSend("receiving_customer_id_queue", message);

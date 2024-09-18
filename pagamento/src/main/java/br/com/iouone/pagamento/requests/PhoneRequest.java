@@ -1,40 +1,19 @@
 package br.com.iouone.pagamento.requests;
 
+import java.util.Map;
+
 public class PhoneRequest {
-    private String country_code;
-    private String area_code;
-    private String number;
+    private Map<String, MobilePhoneRequest> phones;
 
-    public PhoneRequest() {
+    public PhoneRequest(MobilePhoneRequest mobilePhone) {
+        this.phones = Map.of("mobile_phone", mobilePhone);
     }
 
-    public PhoneRequest(String country_code, String area_code, String number) {
-        this.country_code = country_code;
-        this.area_code = area_code;
-        this.number = number;
+    public Map<String, MobilePhoneRequest> getPhones() {
+        return phones;
     }
 
-    public String getCountry_code() {
-        return country_code;
-    }
-
-    public void setCountry_code(String country_code) {
-        this.country_code = country_code;
-    }
-
-    public String getArea_code() {
-        return area_code;
-    }
-
-    public void setArea_code(String area_code) {
-        this.area_code = area_code;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
+    public void setPhones(Map<String, MobilePhoneRequest> phones) {
+        this.phones = phones;
     }
 }
