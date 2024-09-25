@@ -1,4 +1,4 @@
-package br.com.iouone.pagamento.mapper;
+package br.com.iouone.pagamento.mappers;
 
 import br.com.iouone.pagamento.models.Customer;
 import br.com.iouone.pagamento.requests.CustomerRequest;

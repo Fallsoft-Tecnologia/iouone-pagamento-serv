@@ -1,6 +1,11 @@
 package br.com.iouone.pagamento.services.impl;
 
+import br.com.iouone.pagamento.config.feign.PagarMeClient;
+import br.com.iouone.pagamento.mappers.AssinaturaMapper;
+import br.com.iouone.pagamento.models.Assinatura;
+import br.com.iouone.pagamento.models.ItemAssinatura;
 import br.com.iouone.pagamento.repositories.AssinaturaRepository;
+import br.com.iouone.pagamento.repositories.ItemAssinaturaRepository;
 import br.com.iouone.pagamento.requests.AssinaturaCancelRequest;
 import br.com.iouone.pagamento.requests.AssinaturaCartaoRequest;
 import br.com.iouone.pagamento.requests.AssinaturaPixRequest;
@@ -12,14 +17,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class AssinaturaServiceImpl implements AssinaturaService {
 
-    private AssinaturaRepository assinaturaRepository;
+    private final AssinaturaRepository assinaturaRepository;
+    private final AssinaturaMapper assinaturaMapper;
+    private final ItemAssinaturaRepository itemAssinaturaRepository;
+    private final PagarMeClient pagarMeClient;
 
-    public AssinaturaServiceImpl(AssinaturaRepository assinaturaRepository) {
+    public AssinaturaServiceImpl(AssinaturaRepository assinaturaRepository,
+                                 AssinaturaMapper assinaturaMapper,
+                                 ItemAssinaturaRepository itemAssinaturaRepository,
+                                 PagarMeClient pagarMeClient) {
         this.assinaturaRepository = assinaturaRepository;
+        this.assinaturaMapper = assinaturaMapper;
+        this.itemAssinaturaRepository  = itemAssinaturaRepository;
+        this.pagarMeClient = pagarMeClient;
     }
 
     public AssinaturaResponse createAssinaturaCartao(AssinaturaCartaoRequest request) {
-        return null;
+
+        pagarMeClient.createSubscription(request);
+
+        ItemAssinatura itemAssinatura = itemAssinaturaRepository.findByName("AssinaturaPadrao")
+                .orElseThrow();
+        Assinatura assinatura = assinaturaMapper.toDomain(request, itemAssinatura);
+        assinaturaRepository.save(assinatura);
+        return assinaturaMapper.toResponse(assinatura);
     }
 
     public AssinaturaResponse getAssinaturaById(String id) {

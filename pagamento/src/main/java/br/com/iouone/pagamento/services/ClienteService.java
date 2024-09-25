@@ -1,6 +1,6 @@
 package br.com.iouone.pagamento.services;
 
-import br.com.iouone.pagamento.mapper.PessoaToCustomerMapper;
+import br.com.iouone.pagamento.mappers.PessoaToCustomerMapper;
 import br.com.iouone.pagamento.models.Customer;
 import br.com.iouone.pagamento.requests.CustomerRequest;
 import br.com.iouone.pagamento.requests.CustomerIdMessageRequest;
