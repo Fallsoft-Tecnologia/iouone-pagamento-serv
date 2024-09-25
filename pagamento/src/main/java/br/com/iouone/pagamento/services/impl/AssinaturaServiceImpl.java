@@ -1,6 +1,6 @@
 package br.com.iouone.pagamento.services.impl;
 
-import br.com.iouone.pagamento.config.feign.PagarMeClient;
+import br.com.iouone.pagamento.config.feign.PagarmeClient;
 import br.com.iouone.pagamento.mappers.AssinaturaMapper;
 import br.com.iouone.pagamento.models.Assinatura;
 import br.com.iouone.pagamento.models.ItemAssinatura;
@@ -20,12 +20,12 @@ public class AssinaturaServiceImpl implements AssinaturaService {
     private final AssinaturaRepository assinaturaRepository;
     private final AssinaturaMapper assinaturaMapper;
     private final ItemAssinaturaRepository itemAssinaturaRepository;
-    private final PagarMeClient pagarMeClient;
+    private final PagarmeClient pagarMeClient;
 
     public AssinaturaServiceImpl(AssinaturaRepository assinaturaRepository,
                                  AssinaturaMapper assinaturaMapper,
                                  ItemAssinaturaRepository itemAssinaturaRepository,
-                                 PagarMeClient pagarMeClient) {
+                                 PagarmeClient pagarMeClient) {
         this.assinaturaRepository = assinaturaRepository;
         this.assinaturaMapper = assinaturaMapper;
         this.itemAssinaturaRepository  = itemAssinaturaRepository;

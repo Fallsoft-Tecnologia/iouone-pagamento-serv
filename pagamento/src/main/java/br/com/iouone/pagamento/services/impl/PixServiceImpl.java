@@ -1,10 +1,10 @@
 package br.com.iouone.pagamento.services.impl;
 
+import br.com.iouone.pagamento.config.feign.PagarmeClient;
 import br.com.iouone.pagamento.requests.PixRequest;
 import br.com.iouone.pagamento.requests.pix.Item;
 import br.com.iouone.pagamento.requests.pix.Payment;
 import br.com.iouone.pagamento.requests.pix.Pix;
-import br.com.iouone.pagamento.services.PagarmeClient;
 import br.com.iouone.pagamento.services.PixService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,21 +34,14 @@ public class PixServiceImpl implements PixService {
         this.pagarmeClient = pagarmeClient;
     }
 
-    private String getAuthorizationHeader() {
-        String credentials = username + ":" + password;
-        return "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
-    }
-
     @Override
     public String criarTransacaoPix(PixRequest pixRequest) {
-        String authorizationHeader = getAuthorizationHeader();
-        return pagarmeClient.criarTransacaoPix(authorizationHeader, pixRequest).getBody();
+        return pagarmeClient.criarTransacaoPix(pixRequest).getBody();
     }
 
     @Override
     public String obterPedido(String orderId) {
-        String authorizationHeader = getAuthorizationHeader();
-        String pedidoJson = pagarmeClient.obterPedido(authorizationHeader, orderId).getBody();
+        String pedidoJson = pagarmeClient.obterPedido(orderId).getBody();
 
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -92,8 +85,7 @@ public class PixServiceImpl implements PixService {
 
     private void gerarNovaCobranca(String orderId) {
         try {
-            String authorizationHeader = getAuthorizationHeader();
-            String pedidoJson = pagarmeClient.obterPedido(authorizationHeader, orderId).getBody();
+            String pedidoJson = pagarmeClient.obterPedido(orderId).getBody();
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(pedidoJson);
@@ -101,19 +93,7 @@ public class PixServiceImpl implements PixService {
             int amount = root.path("amount").asInt();
             String description = root.path("items").get(0).path("description").asText();
 
-            PixRequest novaTransacaoPix = new PixRequest();
-
-            Item item = new Item();
-            item.setAmount(amount);
-            item.setDescription(description);
-            item.setQuantity(1);
-            novaTransacaoPix.setItems(Collections.singletonList(item));
-
-            novaTransacaoPix.setCustomer_id(customerId);
-
-            Pix pixPayment = new Pix(3600);
-            Payment payment = new Payment("pix", pixPayment);
-            novaTransacaoPix.setPayments(Collections.singletonList(payment));
+            PixRequest novaTransacaoPix = getPixRequest(amount, description, customerId);
 
             String respostaPix = criarTransacaoPix(novaTransacaoPix);
             System.out.println("Nova cobrança gerada: " + respostaPix);
@@ -121,5 +101,22 @@ public class PixServiceImpl implements PixService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static PixRequest getPixRequest(int amount, String description, String customerId) {
+        PixRequest novaTransacaoPix = new PixRequest();
+
+        Item item = new Item();
+        item.setAmount(amount);
+        item.setDescription(description);
+        item.setQuantity(1);
+        novaTransacaoPix.setItems(Collections.singletonList(item));
+
+        novaTransacaoPix.setCustomer_id(customerId);
+
+        Pix pixPayment = new Pix(3600);
+        Payment payment = new Payment("pix", pixPayment);
+        novaTransacaoPix.setPayments(Collections.singletonList(payment));
+        return novaTransacaoPix;
     }
 }

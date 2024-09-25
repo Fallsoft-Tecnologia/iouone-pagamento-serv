@@ -10,10 +10,10 @@ import java.util.Base64;
 @Configuration
 public class FeignConfig {
 
-    @Value("${pagarme.username}")
+    @Value("${pagarme.api.username}")
     private String username;
 
-    @Value("${pagarme.password}")
+    @Value("${pagarme.api.password}")
     private String password;
 
     @Bean

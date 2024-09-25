@@ -1,7 +1,6 @@
 package br.com.iouone.pagamento.services.impl;
 
 
-import br.com.iouone.pagamento.config.feign.PagarMeClient;
 import br.com.iouone.pagamento.mappers.ItemAssinaturaMapper;
 import br.com.iouone.pagamento.models.ItemAssinatura;
 import br.com.iouone.pagamento.repositories.ItemAssinaturaRepository;

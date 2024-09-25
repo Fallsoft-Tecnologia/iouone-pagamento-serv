@@ -1,18 +1,16 @@
 package br.com.iouone.pagamento.services;
 
+import br.com.iouone.pagamento.config.feign.PagarmeClient;
 import br.com.iouone.pagamento.mappers.PessoaToCustomerMapper;
 import br.com.iouone.pagamento.models.Customer;
-import br.com.iouone.pagamento.requests.CustomerRequest;
 import br.com.iouone.pagamento.requests.CustomerIdMessageRequest;
+import br.com.iouone.pagamento.requests.CustomerRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-
-import java.util.Base64;
 
 @Service
 public class ClienteService {
@@ -22,20 +20,9 @@ public class ClienteService {
     private final PagarmeClient pagarmeClient;
     private final RabbitTemplate rabbitTemplate;
 
-    @Value("${pagarme.api.username}")
-    private String username;
-
-    @Value("${pagarme.api.password}")
-    private String password;
-
     public ClienteService(PagarmeClient pagarmeClient, RabbitTemplate rabbitTemplate) {
         this.pagarmeClient = pagarmeClient;
         this.rabbitTemplate = rabbitTemplate;
-    }
-
-    private String getAuthorizationHeader() {
-        String credentials = username + ":" + password;
-        return "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
     }
 
     public ResponseEntity<String> criarCliente(CustomerRequest customerRequest) {
@@ -49,8 +36,7 @@ public class ClienteService {
             logger.error("Erro ao converter cliente para JSON", e);
         }
 
-        String authorizationHeader = getAuthorizationHeader();
-        ResponseEntity<Customer> response = pagarmeClient.criarCliente(authorizationHeader, customer);
+        ResponseEntity<Customer> response = pagarmeClient.criarCliente(customer);
 
         if (response.getStatusCode().is2xxSuccessful()) {
             Customer createdCustomer = response.getBody();
