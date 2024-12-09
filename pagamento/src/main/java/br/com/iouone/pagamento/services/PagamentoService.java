@@ -12,4 +12,10 @@ public interface PagamentoService {
     PagamentoResponse createPagamento(PagamentoRequest request);
 
     PagamentoStatusResponse getStatusPagamento(String id);
+
+    // Método para atualizar o status de um pagamento
+    void atualizarStatusPagamento(String paymentId, String newStatus);
+
+    // Método para enviar notificação ao cliente
+    void enviarNotificacaoCliente(String paymentId, String status);
 }

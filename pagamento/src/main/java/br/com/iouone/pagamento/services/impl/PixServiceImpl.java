@@ -122,4 +122,23 @@ public class PixServiceImpl implements PixService {
             e.printStackTrace();
         }
     }
+
+    public String obterStatusPedido(String orderId) {
+        String authorizationHeader = getAuthorizationHeader();
+        String pedidoJson = pagarmeClient.obterPedido(authorizationHeader, orderId).getBody();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(pedidoJson);
+            
+            String status = root.path("status").asText();
+            System.out.println("Status do pedido: " + status);
+
+            return status;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao processar o pedido", e);
+        }
+    }
 }

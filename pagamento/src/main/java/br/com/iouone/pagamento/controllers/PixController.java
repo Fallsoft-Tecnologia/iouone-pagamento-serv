@@ -3,6 +3,7 @@ package br.com.iouone.pagamento.controllers;
 import br.com.iouone.pagamento.requests.PixRequest;
 import br.com.iouone.pagamento.services.PixService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,16 @@ public class PixController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Erro ao obter pedido: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/status/{orderId}")
+    public ResponseEntity<String> obterStatusPagamento(@PathVariable String orderId) {
+        try {
+            String status = pixService.obterStatusPedido(orderId);
+            return ResponseEntity.ok(status);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao obter status do pagamento: " + e.getMessage());
         }
     }
 }
