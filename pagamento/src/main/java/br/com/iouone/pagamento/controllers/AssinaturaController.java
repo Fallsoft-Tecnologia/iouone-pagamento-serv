@@ -30,11 +30,12 @@ public class AssinaturaController {
     }
 
     @PostMapping
-    public ResponseEntity<AssinaturaResponse> criarAssinatura(@Valid @RequestBody AssinaturaRequest request) {
-        AssinaturaResponse assinatura = assinaturaService.createAssinatura(request);
-        return new ResponseEntity<>(assinatura, HttpStatus.CREATED);
+    public ResponseEntity<AssinaturaResponse> criarAssinatura(@RequestBody AssinaturaRequest request) {
+        AssinaturaResponse response = assinaturaService.createAssinatura(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    /*
     @GetMapping("/{id}")
     public ResponseEntity<AssinaturaResponse> buscarAssinatura(@PathVariable String id) {
         AssinaturaResponse assinatura = assinaturaService.getAssinaturaById(id);
@@ -58,5 +59,7 @@ public class AssinaturaController {
         AssinaturaResponse assinatura = assinaturaService.cancelAssinatura(request);
         return ResponseEntity.ok(assinatura);
     }
+
+     */
 
 }

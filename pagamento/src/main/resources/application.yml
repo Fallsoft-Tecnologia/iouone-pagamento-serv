@@ -21,7 +21,7 @@ eureka:
 
 pagarme:
   api:
-    username: sk_test_6bebfceaf6da4006bc6299a419ee90e3
+    username: sk_test_7d060d8a6e20481699e83159c4f95379
     password: IouOne@147
 
 mq:
