@@ -1,18 +1,31 @@
 package br.com.iouone.pagamento.requests;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 public class AssinaturaRequest {
 
+    @NotBlank(message = "O método de pagamento é obrigatório.")
     private String payment_method;
+    @NotBlank(message = "O intervalo de pagamento é obrigatório.")
     private String interval;
+    @NotNull(message = "A quantidade de intervalos é obrigatória.")
     private Integer interval_count;
+    @NotBlank(message = "O tipo de cobrança é obrigatório.")
     private String billing_type;
+    @NotNull(message = "O cartão de pagamento é obrigatório.")
     private Card card;
+    @NotNull(message = "O esquema de preços é obrigatório.")
     private PricingScheme pricing_scheme;
+    @NotNull(message = "A quantidade de itens é obrigatória.")
     private Integer quantity;
+    @NotBlank(message = "O ID do cliente é obrigatório.")
     private String customer_id;
+    @NotNull(message = "A lista de itens não pode ser nula.")
     private List<Item> items;
+    @NotNull(message = "O endereço de cobrança é obrigatório.")
     private BillingAddress billing_address;
 
     public BillingAddress getBilling_address() {
