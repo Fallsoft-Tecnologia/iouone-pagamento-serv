@@ -2,9 +2,9 @@ package br.com.iouone.pagamento.responses;
 
 public class PagamentoStatusResponse {
     private String status;
-    private Long id;
+    private Integer id;
 
-    public PagamentoStatusResponse(String status, Long id) {
+    public PagamentoStatusResponse(String status, Integer id) {
         this.status = status;
         this.id = id;
     }
@@ -17,11 +17,11 @@ public class PagamentoStatusResponse {
         this.status = status;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }

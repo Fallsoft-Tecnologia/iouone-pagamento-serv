@@ -40,7 +40,7 @@ public class PagamentoServiceImpl implements PagamentoService {
             Optional<Pagamento> pagamentoOptional = pagamentoRepository.findById(paymentId);
             if (pagamentoOptional.isPresent()) {
                 Pagamento pagamento = pagamentoOptional.get();
-                return new PagamentoStatusResponse(pagamento.getStatus(), pagamento.getId());
+                return new PagamentoStatusResponse(pagamento.getStatusPagamento(), pagamento.getId());
             } else {
                 // Retornar uma resposta indicando que o pagamento não foi encontrado
                 throw new RuntimeException("Pagamento não encontrado");
@@ -57,7 +57,7 @@ public class PagamentoServiceImpl implements PagamentoService {
             Optional<Pagamento> pagamentoOptional = pagamentoRepository.findById(id);
             if (pagamentoOptional.isPresent()) {
                 Pagamento pagamento = pagamentoOptional.get();
-                pagamento.setStatus(newStatus);
+                pagamento.setStatusPagamento(newStatus);
                 pagamentoRepository.save(pagamento);
             } else {
                 throw new RuntimeException("Pagamento não encontrado");

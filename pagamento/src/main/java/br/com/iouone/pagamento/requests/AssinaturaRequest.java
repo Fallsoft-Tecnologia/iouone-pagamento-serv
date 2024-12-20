@@ -13,15 +13,7 @@ public class AssinaturaRequest {
     private Integer quantity;
     private String customer_id;
     private List<Item> items;
-    private BillingAddress billing_address;
 
-    public BillingAddress getBilling_address() {
-        return billing_address;
-    }
-
-    public void setBilling_address(BillingAddress billing_address) {
-        this.billing_address = billing_address;
-    }
 
     public String getPayment_method() {
         return payment_method;

@@ -9,24 +9,25 @@ public class OrdenadorPagamento extends DefaultCriacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_ORDENADOR_PAGAMENTO")
-    private Long id;
+    private Integer id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "MEIO_DE_PAGAMENTO")
     private MetodoPagamento meioDePagamento;
 
     public OrdenadorPagamento() {
     }
 
-    public OrdenadorPagamento(Long id, MetodoPagamento meioDePagamento) {
+    public OrdenadorPagamento(Integer id, MetodoPagamento meioDePagamento) {
         this.id = id;
         this.meioDePagamento = meioDePagamento;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

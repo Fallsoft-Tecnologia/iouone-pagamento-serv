@@ -11,11 +11,14 @@ public class ItemAssinatura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_ITEM_ASSINATURA")
-    private Long id;
+    private Integer id;
     private String subscriptionId;
-    private String name;
-    private String description;
+    private String nameItemAssinatura;
+    private String descriptionItemAssinatura;
     private int quantity;
     private BigDecimal unitPrice;
+
+    @OneToOne(mappedBy = "itemAssinatura", cascade = CascadeType.ALL)
+    private Assinatura assinatura;
 
 }
