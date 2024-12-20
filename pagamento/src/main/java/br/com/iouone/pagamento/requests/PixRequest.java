@@ -3,13 +3,21 @@ package br.com.iouone.pagamento.requests;
 import br.com.iouone.pagamento.requests.pix.Item;
 import br.com.iouone.pagamento.requests.pix.Payment;
 import br.com.iouone.pagamento.requests.pix.Pix;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Collections;
 import java.util.List;
 
 public class PixRequest {
+    @NotBlank(message = "O ID do cliente é obrigatório.")
     private String customer_id;
+    @NotNull(message = "A lista de itens não pode ser nula.")
+    @Size(min = 1, message = "A lista de itens não pode ser vazia.")
     private List<Item> items;
+    @NotNull(message = "A lista de pagamentos não pode ser nula.")
+    @Size(min = 1, message = "A lista de pagamentos não pode ser vazia.")
     private List<Payment> payments;
 
     public PixRequest() {

@@ -2,6 +2,7 @@ package br.com.iouone.pagamento.controllers;
 
 import br.com.iouone.pagamento.requests.PixRequest;
 import br.com.iouone.pagamento.services.PixService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class PixController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> criarTransacaoPix(@RequestBody PixRequest pixRequest) {
+    public ResponseEntity<String> criarTransacaoPix(@Valid @RequestBody PixRequest pixRequest) {
         try {
             PixRequest request = new PixRequest(pixRequest.getCustomer_id());
             String response = pixService.criarTransacaoPix(request);
