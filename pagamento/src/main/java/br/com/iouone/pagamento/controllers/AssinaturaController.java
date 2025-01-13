@@ -30,7 +30,7 @@ public class AssinaturaController {
     }
 
     @PostMapping
-    public ResponseEntity<AssinaturaResponse> criarAssinatura(@RequestBody AssinaturaRequest request) {
+    public ResponseEntity<AssinaturaResponse> criarAssinatura(@Valid @RequestBody AssinaturaRequest request) {
         AssinaturaResponse response = assinaturaService.createAssinatura(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
