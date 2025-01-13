@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  pagamento-serv:
+    build:
+      context: ../pagamento-serv
+      dockerfile: ../pagamento-serv/Dockerfile
+      args:
+        EXPOSE_PORT: 7075
+    image: fallsoft/pagamento-serv:latest
+    ports:
+      - 7075:7075
+    container_name: pagamento-serv
+    environment:
+      spring.profiles.active: hml
+      SPRING_DATASOURCE_URL: jdbc:mysql://iouone_db:3306/iouone_pagamento_hml
+      SPRING_DATASOURCE_USERNAME: iouone
+      SPRING_DATASOURCE_PASSWORD: iouone-db
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+    networks:
+      - backend
+    restart: unless-stopped
+networks:
+  backend:
+    name: backend
+    driver: bridge
