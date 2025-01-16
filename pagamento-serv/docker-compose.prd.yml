@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  pagamento_db:
+    build:
+      context: ./pagamento-db
+    image: fallsoft/pagamento_db:latest
+    ports:
+      - 3306:3306
+    container_name: pagamento_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=IouOne@147
+      - MYSQL_DATABASE=iouone_pagamento_prd
+      - MYSQL_USER=iouone
+      - MYSQL_PASSWORD=iouone-db
+    networks:
+      - backend
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: unless-stopped
+
+  pagamento-serv:
+    build:
+      context: ../pagamento-serv
+      dockerfile: ../pagamento-serv/Dockerfile
+      args:
+        EXPOSE_PORT: 7072
+    image: fallsoft/pagamento-serv:latest
+    ports:
+      - 7072:7072
+    container_name: pagamento-serv
+    environment:
+      spring.profiles.active: prd
+      SPRING_DATASOURCE_URL: jdbc:mysql://pagamento_db:3306/iouone_pagamento_prd
+      SPRING_DATASOURCE_USERNAME: iouone
+      SPRING_DATASOURCE_PASSWORD: iouone-db
+    depends_on:
+      - pagamento_db
+    networks:
+      - backend
+    restart: unless-stopped
+networks:
+  backend:
+    driver: "bridge"
