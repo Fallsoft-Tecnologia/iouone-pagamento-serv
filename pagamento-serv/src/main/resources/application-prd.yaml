@@ -2,23 +2,25 @@ spring:
   application:
     name: mspayment
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+  host: ${SPRING_RABBITMQ_HOST:rabbitmq}
+  port: ${SPRING_RABBITMQ_PORT:5672}
+  username: ${SPRING_RABBITMQ_USERNAME:guest}
+  password: ${SPRING_RABBITMQ_PASSWORD:guest}
   data:
     jpa:
       repositories:
         enabled: true
   datasource:
-    username: root
-    url: jdbc:mysql://localhost:3306/iouone_pagamento_prd?useTimezone=true&serverTimezone=UTC
-    password: root
+    username: ${SPRING_DATASOURCE_USERNAME:iouone}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://iouone_db:3306/iouone_pagamento_prd?useTimezone=true&serverTimezone=UTC}
+    password: ${SPRING_DATASOURCE_PASSWORD:iouone-db}
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
+        boot:
+          allow_jdbc_metadata_access: false
     database-platform: org.hibernate.dialect
     hibernate:
       ddl-auto: validate
