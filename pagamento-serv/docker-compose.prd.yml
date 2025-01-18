@@ -1,22 +1,5 @@
 version: '3.8'
 services:
-  pagamento_db:
-    build:
-      context: ./pagamento-db
-    image: fallsoft/pagamento_db:latest
-    ports:
-      - 3306:3306
-    container_name: pagamento_db
-    environment:
-      - MYSQL_ROOT_PASSWORD=IouOne@147
-      - MYSQL_DATABASE=iouone_pagamento_prd
-      - MYSQL_USER=iouone
-      - MYSQL_PASSWORD=iouone-db
-    networks:
-      - backend
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    restart: unless-stopped
-
   pagamento-serv:
     build:
       context: ../pagamento-serv
@@ -29,14 +12,18 @@ services:
     container_name: pagamento-serv
     environment:
       spring.profiles.active: prd
-      SPRING_DATASOURCE_URL: jdbc:mysql://pagamento_db:3306/iouone_pagamento_prd
+      SPRING_DATASOURCE_URL: jdbc:mysql://iouone_db:3306/iouone_pagamento_prd
       SPRING_DATASOURCE_USERNAME: iouone
       SPRING_DATASOURCE_PASSWORD: iouone-db
-    depends_on:
-      - pagamento_db
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
     networks:
       - backend
     restart: unless-stopped
 networks:
   backend:
+    name: backend
     driver: "bridge"
