@@ -12,7 +12,7 @@ spring:
         enabled: true
   datasource:
     username: root
-    url: jdbc:mysql://localhost:3306/iouone_pagamento_hml?useTimezone=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/iouone_pagamento?useTimezone=true&serverTimezone=UTC
     password: root
   jpa:
     properties:
@@ -39,3 +39,11 @@ pagarme:
 mq:
   queue:
     pessoa_registration: pessoa_registration_queue
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    urls:
+      - url: /v3/api-docs
+        name: IOUONE API
+    server-url: http://localhost:${local.server.port}
