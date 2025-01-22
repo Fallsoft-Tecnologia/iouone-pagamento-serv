@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/pix")
+@CrossOrigin
 public class PixController {
 
     private final PixService pixService;
