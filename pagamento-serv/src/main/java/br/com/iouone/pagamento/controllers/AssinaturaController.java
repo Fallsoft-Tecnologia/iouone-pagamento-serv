@@ -3,6 +3,7 @@ package br.com.iouone.pagamento.controllers;
 import br.com.iouone.pagamento.requests.AssinaturaCancelRequest;
 import br.com.iouone.pagamento.requests.AssinaturaRequest;
 import br.com.iouone.pagamento.requests.AssinaturaUpdateRequest;
+import br.com.iouone.pagamento.requests.PagamentoAssinaturaRequest;
 import br.com.iouone.pagamento.responses.AssinaturaResponse;
 import br.com.iouone.pagamento.responses.PagamentoResponse;
 import br.com.iouone.pagamento.services.PagamentoService;
@@ -32,6 +33,12 @@ public class AssinaturaController {
     @PostMapping
     public ResponseEntity<AssinaturaResponse> criarAssinatura(@Valid @RequestBody AssinaturaRequest request) {
         AssinaturaResponse response = assinaturaService.createAssinatura(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+    @PostMapping("pagamento/cartao")
+    public ResponseEntity<AssinaturaResponse> criarAssinaturav2(@Valid @RequestBody PagamentoAssinaturaRequest request,
+                                                                @RequestHeader("fluxoId") String fluxoId) {
+        AssinaturaResponse response = assinaturaService.createAssinaturav2(request,fluxoId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

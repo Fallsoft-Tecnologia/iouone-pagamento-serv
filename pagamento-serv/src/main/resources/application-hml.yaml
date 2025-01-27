@@ -50,3 +50,8 @@ springdoc:
       - url: /v3/api-docs
         name: IOUONE API
     server-url: http://pagamento-hml.iouone.com.br
+
+urls:
+  api:
+    pessoa: http://plataforma-hml.iouone.com.br
+    pagarme: https://api.pagar.me/core/v5

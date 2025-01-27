@@ -13,8 +13,6 @@ public class Pagamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_PAGAMENTO")
     private Integer id;
-
-    private String paymentMethod;
     private BigDecimal amount;
     private LocalDateTime paymentDate;
     private String statusPagamento;
@@ -22,6 +20,20 @@ public class Pagamento {
     @ManyToOne
     @JoinColumn(name = "assinatura")
     private Assinatura assinatura;
+    @ManyToOne
+    @JoinColumn(name = "paymentMethod")
+    private OrdenadorPagamento paymentMethod;
+
+    public Pagamento() {
+    }
+
+    public Pagamento(Assinatura assinatura, String statusPagamento, LocalDateTime paymentDate, BigDecimal amount, OrdenadorPagamento paymentMethod) {
+        this.assinatura = assinatura;
+        this.statusPagamento = statusPagamento;
+        this.paymentDate = paymentDate;
+        this.amount = amount;
+        this.paymentMethod = paymentMethod;
+    }
 
     public Integer getId() {
         return id;
@@ -31,11 +43,11 @@ public class Pagamento {
         this.id = id;
     }
 
-    public String getPaymentMethod() {
+    public OrdenadorPagamento getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(OrdenadorPagamento paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
