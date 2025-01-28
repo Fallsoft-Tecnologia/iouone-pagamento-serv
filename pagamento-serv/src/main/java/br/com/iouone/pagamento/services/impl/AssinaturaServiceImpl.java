@@ -1,11 +1,9 @@
 package br.com.iouone.pagamento.services.impl;
 
 import br.com.iouone.pagamento.client.PessoaApiClient;
-import br.com.iouone.pagamento.models.Assinatura;
-import br.com.iouone.pagamento.models.ItemAssinatura;
-import br.com.iouone.pagamento.models.MetodoPagamento;
-import br.com.iouone.pagamento.models.Pagamento;
+import br.com.iouone.pagamento.models.*;
 import br.com.iouone.pagamento.repositories.AssinaturaRepository;
+import br.com.iouone.pagamento.repositories.ItemAssinaturaRepository;
 import br.com.iouone.pagamento.repositories.MeioPagamentoRepository;
 import br.com.iouone.pagamento.repositories.PagamentoRepository;
 import br.com.iouone.pagamento.requests.AssinaturaRequest;
@@ -33,6 +31,7 @@ public class AssinaturaServiceImpl implements AssinaturaService {
     private final AssinaturaRepository assinaturaRepository;
     private final PagamentoRepository pagamentoRepository;
     private final MeioPagamentoRepository meioPagamentoRepository;
+    private final ItemAssinaturaRepository itemAssinaturaRepository;
 
     @Value("${pagarme.api.username}")
     private String username;
@@ -42,12 +41,13 @@ public class AssinaturaServiceImpl implements AssinaturaService {
 
 
     @Autowired
-    public AssinaturaServiceImpl(PagarmeClient pagarmeClient, PessoaServiceImpl pessoaService, AssinaturaRepository assinaturaRepository, PagamentoRepository pagamentoRepository, MeioPagamentoRepository meioPagamentoRepository) {
+    public AssinaturaServiceImpl(PagarmeClient pagarmeClient, PessoaServiceImpl pessoaService, AssinaturaRepository assinaturaRepository, PagamentoRepository pagamentoRepository, MeioPagamentoRepository meioPagamentoRepository, ItemAssinaturaRepository itemAssinaturaRepository) {
         this.pagarmeClient = pagarmeClient;
         this.pessoaService = pessoaService;
         this.assinaturaRepository = assinaturaRepository;
         this.pagamentoRepository = pagamentoRepository;
         this.meioPagamentoRepository = meioPagamentoRepository;
+        this.itemAssinaturaRepository = itemAssinaturaRepository;
     }
 
     private String getAuthorizationHeader() {
@@ -71,19 +71,17 @@ public class AssinaturaServiceImpl implements AssinaturaService {
         String authorizationHeader = getAuthorizationHeader();
         ResponseEntity<AssinaturaResponse> response = pagarmeClient.criarAssinatura(authorizationHeader, requestPagarme);
 
-        if (response.getStatusCode().value() == 200) {
-            if (!Objects.equals(response.getBody().getStatus(), "failed")) {
-                var assinatura = assinaturaRepository.save(new Assinatura(dadosEndereco.getCustomerId(),
-                        response.getBody().getId(), "month", LocalDateTime.now(),
-                        response.getBody().getStatus(), new ItemAssinatura(1)));
-
-                var meioPagamento = meioPagamentoRepository.findByMeioPagamento(meioPagamento(request.getFormaPagamento()));
-                pagamentoRepository.save(new Pagamento(assinatura, response.getBody().getStatus(), LocalDateTime.now(), null, meioPagamento));
-            }
-        }
+        var assinatura = assinaturaRepository.save(new Assinatura(dadosEndereco.getCustomerId(),
+                response.getBody().getId(), "month", LocalDateTime.now(),
+                response.getBody().getStatus(), buscaItemAssinatura(1)));
 
 
-        return response.getBody();
+        var meioPagamento = buscaOrdenadorPagamento(request.getFormaPagamento());
+
+        pagamentoRepository.save(new Pagamento(assinatura, "certo", LocalDateTime.now(), null, meioPagamento));
+
+
+        return new AssinaturaResponse();
     }
 
     private static AssinaturaRequest getAssinaturaRequest(PagamentoAssinaturaRequest request, String[] dataValidade, DadosEnderecoPessoaResponse dadosEndereco) {
@@ -91,7 +89,7 @@ public class AssinaturaServiceImpl implements AssinaturaService {
         String ano = dataValidade[1];
 
         var endereco = new BillingAddress(dadosEndereco.getEndereco(), dadosEndereco.getEstado(),
-                dadosEndereco.getPais(), dadosEndereco.getCidade(), dadosEndereco.getCep());
+                "BR", dadosEndereco.getCidade(), dadosEndereco.getCep());
 
         var card = new Card(endereco, request.getNumeroCartao(), Integer.parseInt(mes), Integer.parseInt(ano), request.getNomeCartao());
 
@@ -104,12 +102,26 @@ public class AssinaturaServiceImpl implements AssinaturaService {
     }
 
 
-    public String meioPagamento(String meioPagamento) {
+    public Enum meioPagamento(String meioPagamento) {
         return switch (meioPagamento) {
-            case "credito" -> MetodoPagamento.CREDIT_CARD.name();
-            case "debito" -> MetodoPagamento.DEBIT_CARD.name();
-            case "pix" -> MetodoPagamento.PIX.name();
-            default -> "nao encontrado";
+            case "credito" -> MetodoPagamento.CREDIT_CARD;
+            case "debito" -> MetodoPagamento.DEBIT_CARD;
+            case "pix" -> MetodoPagamento.PIX;
+            default -> MetodoPagamento.NAO_ENCONTRADO;
         };
+    }
+
+    private ItemAssinatura buscaItemAssinatura(Integer idItemAssinatura) {
+        return itemAssinaturaRepository.findById(idItemAssinatura)
+                .orElseThrow(() -> new RuntimeException("Item Assinatura não encontrado!!"));
+    }
+
+    private OrdenadorPagamento buscaOrdenadorPagamento(String meioPagamento) {
+        var valorMeioPagamento = meioPagamento(meioPagamento);
+        if (Objects.equals(valorMeioPagamento, MetodoPagamento.NAO_ENCONTRADO)) {
+            throw new RuntimeException("Nao foi encontrado meio de Pagamento - Enum");
+        }
+        return meioPagamentoRepository.findByMeioDePagamento(valorMeioPagamento);
+
     }
 }

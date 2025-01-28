@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MeioPagamentoRepository extends JpaRepository<OrdenadorPagamento,Integer> {
 
-    OrdenadorPagamento findByMeioPagamento(String meioPagamento);
+    OrdenadorPagamento findByMeioDePagamento(Enum meioPagamento);
 }

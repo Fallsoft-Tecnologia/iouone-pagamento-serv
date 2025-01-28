@@ -20,6 +20,7 @@ public class Pagamento {
     @ManyToOne
     @JoinColumn(name = "assinatura")
     private Assinatura assinatura;
+
     @ManyToOne
     @JoinColumn(name = "paymentMethod")
     private OrdenadorPagamento paymentMethod;

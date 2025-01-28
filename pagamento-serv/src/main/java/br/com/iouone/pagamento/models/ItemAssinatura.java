@@ -18,9 +18,6 @@ public class ItemAssinatura {
     private int quantity;
     private BigDecimal unitPrice;
 
-    @OneToOne(mappedBy = "itemAssinatura", cascade = CascadeType.ALL)
-    private Assinatura assinatura;
-
     public ItemAssinatura() {
     }
 
@@ -28,14 +25,14 @@ public class ItemAssinatura {
         this.id = id;
     }
 
-    public ItemAssinatura(Integer id, String subscriptionId, String nameItemAssinatura, String descriptionItemAssinatura, int quantity, BigDecimal unitPrice, Assinatura assinatura) {
+    public ItemAssinatura(Integer id, String subscriptionId, String nameItemAssinatura, String descriptionItemAssinatura, int quantity, BigDecimal unitPrice) {
         this.id = id;
         this.subscriptionId = subscriptionId;
         this.nameItemAssinatura = nameItemAssinatura;
         this.descriptionItemAssinatura = descriptionItemAssinatura;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
-        this.assinatura = assinatura;
+
     }
 
     public Integer getId() {
@@ -86,11 +83,4 @@ public class ItemAssinatura {
         this.unitPrice = unitPrice;
     }
 
-    public Assinatura getAssinatura() {
-        return assinatura;
-    }
-
-    public void setAssinatura(Assinatura assinatura) {
-        this.assinatura = assinatura;
-    }
 }

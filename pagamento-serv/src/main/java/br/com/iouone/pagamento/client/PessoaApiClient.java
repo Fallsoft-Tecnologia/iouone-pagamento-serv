@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "pessoaClient", url = "${urls.api.pessoa}")
 public interface PessoaApiClient {
 
-    @GetMapping("/pagamento/dados-endereco")
+    @GetMapping("api/v2/pessoas/pagamento/dados-endereco")
      DadosEnderecoPessoaResponse getDadosPessoaEndereco(@RequestParam("fluxoId") String fluxoId);
 }

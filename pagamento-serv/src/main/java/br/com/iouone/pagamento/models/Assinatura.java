@@ -18,8 +18,8 @@ public class Assinatura {
     private LocalDateTime startAt;
     private String statusAssinatura;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "item_assinatura", referencedColumnName = "id_item_assinatura")
+    @ManyToOne
+    @JoinColumn(name = "itemAssinatura")
     private ItemAssinatura itemAssinatura;
 
     public Assinatura() {
