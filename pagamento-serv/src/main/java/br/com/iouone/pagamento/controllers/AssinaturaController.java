@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -38,8 +39,22 @@ public class AssinaturaController {
     @PostMapping("pagamento/cartao")
     public ResponseEntity<AssinaturaResponse> criarAssinaturav2(@Valid @RequestBody PagamentoAssinaturaRequest request,
                                                                 @RequestHeader("fluxoId") String fluxoId) {
-        AssinaturaResponse response = assinaturaService.createAssinaturav2(request,fluxoId);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        try {
+            AssinaturaResponse response = assinaturaService.createAssinaturav2(request,fluxoId);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
+    }
+
+    @GetMapping("status")
+    public ResponseEntity<?> listarAssinaturas(@RequestParam("customerId") String customerId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(assinaturaService.assinaturaAtivada(customerId));
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     /*

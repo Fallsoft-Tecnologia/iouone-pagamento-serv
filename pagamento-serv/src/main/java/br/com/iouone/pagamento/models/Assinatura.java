@@ -35,6 +35,16 @@ public class Assinatura {
         this.itemAssinatura = itemAssinatura;
     }
 
+    public Assinatura(Integer id, String customerId, String codeAssinatura, String intervalAssinatura, LocalDateTime startAt, String statusAssinatura, ItemAssinatura itemAssinatura) {
+        this.id = id;
+        this.customerId = customerId;
+        this.codeAssinatura = codeAssinatura;
+        this.intervalAssinatura = intervalAssinatura;
+        this.startAt = startAt;
+        this.statusAssinatura = statusAssinatura;
+        this.itemAssinatura = itemAssinatura;
+    }
+
     public Integer getId() {
         return id;
     }

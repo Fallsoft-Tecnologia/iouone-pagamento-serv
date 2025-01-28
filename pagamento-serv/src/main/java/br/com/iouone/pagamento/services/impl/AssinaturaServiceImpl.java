@@ -1,6 +1,6 @@
 package br.com.iouone.pagamento.services.impl;
 
-import br.com.iouone.pagamento.client.PessoaApiClient;
+import br.com.iouone.pagamento.client.PagarmeClient;
 import br.com.iouone.pagamento.models.*;
 import br.com.iouone.pagamento.repositories.AssinaturaRepository;
 import br.com.iouone.pagamento.repositories.ItemAssinaturaRepository;
@@ -13,7 +13,6 @@ import br.com.iouone.pagamento.requests.PagamentoAssinaturaRequest;
 import br.com.iouone.pagamento.responses.AssinaturaResponse;
 import br.com.iouone.pagamento.responses.DadosEnderecoPessoaResponse;
 import br.com.iouone.pagamento.services.AssinaturaService;
-import br.com.iouone.pagamento.client.PagarmeClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -123,5 +122,23 @@ public class AssinaturaServiceImpl implements AssinaturaService {
         }
         return meioPagamentoRepository.findByMeioDePagamento(valorMeioPagamento);
 
+    }
+
+    public Boolean assinaturaAtivada(String customerId) {
+        var getAssinatura = assinaturaRepository.buscarDataInicialAssinatura(customerId);
+        if (getAssinatura.isEmpty()) {
+            return false;
+        }
+        var dataFuturo = getAssinatura.get(0).getStartAt().plusMonths(1L);
+        var dataAtual = LocalDateTime.now();
+
+        if (!dataFuturo.isAfter(dataAtual)) {
+            var assinatura = getAssinatura.get(0);
+            assinaturaRepository.save(new Assinatura(assinatura.getId(), assinatura.getCustomerId(),
+                    assinatura.getCodeAssinatura(), assinatura.getIntervalAssinatura(), assinatura.getStartAt(),
+                    "expired-time", assinatura.getItemAssinatura()));
+            return false;
+        }
+        return true;
     }
 }
