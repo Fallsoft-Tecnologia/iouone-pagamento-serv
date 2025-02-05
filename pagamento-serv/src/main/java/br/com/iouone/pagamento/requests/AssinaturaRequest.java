@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AssinaturaRequest {
 
@@ -25,8 +26,20 @@ public class AssinaturaRequest {
     private String customer_id;
     @NotNull(message = "A lista de itens não pode ser nula.")
     private List<Item> items;
-    @NotNull(message = "O endereço de cobrança é obrigatório.")
-    private BillingAddress billing_address;
+
+    public AssinaturaRequest() {
+    }
+
+    public AssinaturaRequest(String payment_method, Card card, String customer_id) {
+        this.payment_method = Objects.equals(payment_method, "credito") ? "credit_card" : "debit_card";
+        this.interval = "month";
+        this.interval_count = 1;
+        this.billing_type = "prepaid";
+        this.card = card;
+        this.pricing_scheme = new PricingScheme("Unit",20);
+        this.customer_id = customer_id;
+        this.items = List.of(new Item(new PricingScheme("Unit",500),"Assinatura_Iouone",1,"IouOne_Pagamento_Assinatura"));
+    }
 
 
     public String getPayment_method() {

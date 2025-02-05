@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "meio_de_pagamento")
-public class OrdenadorPagamento extends DefaultCriacao {
+public class OrdenadorPagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

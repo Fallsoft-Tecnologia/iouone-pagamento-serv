@@ -47,3 +47,8 @@ springdoc:
       - url: /v3/api-docs
         name: IOUONE API
     server-url: http://localhost:${local.server.port}
+
+urls:
+  api:
+    pessoa: http://localhost:7071
+    pagarme: https://api.pagar.me/core/v5

@@ -4,6 +4,14 @@ public class PricingScheme {
     private String scheme_type;
     private Integer price;
 
+    public PricingScheme() {
+    }
+
+    public PricingScheme(String scheme_type, Integer price) {
+        this.scheme_type = scheme_type;
+        this.price = price;
+    }
+
     // Getters e Setters
     public String getScheme_type() {
         return scheme_type;

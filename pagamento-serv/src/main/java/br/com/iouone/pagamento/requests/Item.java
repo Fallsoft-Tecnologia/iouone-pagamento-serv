@@ -6,6 +6,16 @@ public class Item {
     private Integer quantity;
     private String name;
 
+    public Item() {
+    }
+
+    public Item(PricingScheme pricing_scheme, String description, Integer quantity, String name) {
+        this.pricing_scheme = pricing_scheme;
+        this.description = description;
+        this.quantity = quantity;
+        this.name = name;
+    }
+
     // Getters e Setters
     public PricingScheme getPricing_scheme() {
         return pricing_scheme;

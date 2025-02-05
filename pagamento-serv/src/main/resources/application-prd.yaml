@@ -48,4 +48,9 @@ springdoc:
     urls:
       - url: /v3/api-docs
         name: IOUONE API
-    server-url: http://localhost:${local.server.port}
+    server-url: http://pagamento-prd.iouone.com.br
+
+urls:
+  api:
+    pessoa: http://plataforma-prd.iouone.com.br
+    pagarme: https://api.pagar.me/core/v5

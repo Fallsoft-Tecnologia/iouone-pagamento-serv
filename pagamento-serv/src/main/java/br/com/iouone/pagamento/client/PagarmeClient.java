@@ -1,4 +1,4 @@
-package br.com.iouone.pagamento.services;
+package br.com.iouone.pagamento.client;
 
 
 import br.com.iouone.pagamento.models.Customer;
@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "pagarmeClient", url = "https://api.pagar.me/core/v5")
+@FeignClient(name = "pagarmeClient", url = "${urls.api.pagarme}")
 public interface PagarmeClient {
 
     @PostMapping("/customers")

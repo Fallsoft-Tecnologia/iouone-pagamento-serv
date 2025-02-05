@@ -4,7 +4,7 @@ import br.com.iouone.pagamento.requests.PixRequest;
 import br.com.iouone.pagamento.requests.pix.Item;
 import br.com.iouone.pagamento.requests.pix.Payment;
 import br.com.iouone.pagamento.requests.pix.Pix;
-import br.com.iouone.pagamento.services.PagarmeClient;
+import br.com.iouone.pagamento.client.PagarmeClient;
 import br.com.iouone.pagamento.services.PixService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

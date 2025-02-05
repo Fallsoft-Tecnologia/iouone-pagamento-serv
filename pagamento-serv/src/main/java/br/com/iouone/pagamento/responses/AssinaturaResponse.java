@@ -6,6 +6,7 @@ public class AssinaturaResponse {
     private String customer_id;
     private String subscription_id;
 
+
     public String getId() {
         return id;
     }
