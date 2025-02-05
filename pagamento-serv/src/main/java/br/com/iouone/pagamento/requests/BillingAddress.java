@@ -7,6 +7,17 @@ public class BillingAddress {
     private String city;
     private String zip_code;
 
+    public BillingAddress() {
+    }
+
+    public BillingAddress(String line_1, String state, String country, String city, String zip_code) {
+        this.line_1 = line_1;
+        this.state = state;
+        this.country = country;
+        this.city = city;
+        this.zip_code = zip_code;
+    }
+
     // Getters e Setters
     public String getLine_1() {
         return line_1;

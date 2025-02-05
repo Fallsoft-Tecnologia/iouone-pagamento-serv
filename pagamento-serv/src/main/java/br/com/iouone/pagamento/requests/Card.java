@@ -7,6 +7,17 @@ public class Card {
     private Integer exp_year;
     private String holder_name;
 
+    public Card() {
+    }
+
+    public Card(BillingAddress billing_address, String number, Integer exp_month, Integer exp_year, String holder_name) {
+        this.billing_address = billing_address;
+        this.number = number;
+        this.exp_month = exp_month;
+        this.exp_year = exp_year;
+        this.holder_name = holder_name;
+    }
+
     // Getters e Setters
     public BillingAddress getBilling_address() {
         return billing_address;
