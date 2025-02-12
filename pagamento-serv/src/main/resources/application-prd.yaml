@@ -2,7 +2,7 @@ spring:
   application:
     name: mspayment
   rabbitmq:
-  host: ${SPRING_RABBITMQ_HOST:rabbitmq}
+  host: ${SPRING_RABBITMQ_HOST:localhost}
   port: ${SPRING_RABBITMQ_PORT:5672}
   username: ${SPRING_RABBITMQ_USERNAME:guest}
   password: ${SPRING_RABBITMQ_PASSWORD:guest}
@@ -12,7 +12,7 @@ spring:
         enabled: true
   datasource:
     username: ${SPRING_DATASOURCE_USERNAME:iouone}
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://iouone_db:3306/iouone_pagamento_prd?useTimezone=true&serverTimezone=UTC}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://srv654370.hstgr.cloud:3306/iouone_pagamento_prd?useTimezone=true&serverTimezone=UTC}
     password: ${SPRING_DATASOURCE_PASSWORD:iouone-db}
   jpa:
     properties:
@@ -31,7 +31,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
 
 pagarme:
   api:
@@ -48,9 +48,9 @@ springdoc:
     urls:
       - url: /v3/api-docs
         name: IOUONE API
-    server-url: http://pagamento-prd.iouone.com.br
+    server-url: https://pagamento-prd.iouone.com.br
 
 urls:
   api:
-    pessoa: http://plataforma-prd.iouone.com.br
+    pessoa: https://plataforma-prd.iouone.com.br
     pagarme: https://api.pagar.me/core/v5
