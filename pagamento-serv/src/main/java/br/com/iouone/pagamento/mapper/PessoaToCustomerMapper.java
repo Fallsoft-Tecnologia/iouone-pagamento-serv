@@ -3,7 +3,8 @@ package br.com.iouone.pagamento.mapper;
 import br.com.iouone.pagamento.models.Customer;
 import br.com.iouone.pagamento.requests.CustomerRequest;
 import br.com.iouone.pagamento.requests.MobilePhoneRequest;
-import br.com.iouone.pagamento.requests.PhoneRequest;
+
+import java.util.Map;
 
 public class PessoaToCustomerMapper {
 
@@ -25,11 +26,10 @@ public class PessoaToCustomerMapper {
             String number = celular.substring(4);
 
             MobilePhoneRequest mobilePhone = new MobilePhoneRequest(countryCode, areaCode, number);
-            PhoneRequest phoneDTO = new PhoneRequest(mobilePhone);
-            customer.setPhone(phoneDTO);
-            System.out.println("Telefone configurado: " + phoneDTO);
+
+            customer.setPhones(Map.of("mobile_phone", mobilePhone));
         } else {
-            customer.setPhone(null);
+            customer.setPhones(null);
             System.out.println("Telefone não configurado, valor null ou formato inválido");
         }
 

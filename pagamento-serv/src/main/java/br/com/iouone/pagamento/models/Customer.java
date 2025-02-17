@@ -1,6 +1,8 @@
 package br.com.iouone.pagamento.models;
 
-import br.com.iouone.pagamento.requests.PhoneRequest;
+import br.com.iouone.pagamento.requests.MobilePhoneRequest;
+
+import java.util.Map;
 
 public class Customer {
     private String id;
@@ -10,12 +12,15 @@ public class Customer {
     private String type; // "individual" ou "company"
     private String gender; // "male" ou "female"
     private String birthdate; // "yyyy-MM-dd"
-    private PhoneRequest phone;
+    private Map<String, MobilePhoneRequest> phones;
+
+
+
 
     public Customer() {
     }
 
-    public Customer(String id, String name, String email, String document, String type, String gender, String birthdate, PhoneRequest phone) {
+    public Customer(String id, String name, String email, String document, String type, String gender, String birthdate, Map<String, MobilePhoneRequest> phones) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -23,7 +28,7 @@ public class Customer {
         this.type = type;
         this.gender = gender;
         this.birthdate = birthdate;
-        this.phone = phone;
+        this.phones = phones;
     }
 
     public String getId() {
@@ -82,11 +87,12 @@ public class Customer {
         this.birthdate = birthdate;
     }
 
-    public PhoneRequest getPhone() {
-        return phone;
+
+    public Map<String, MobilePhoneRequest> getPhones() {
+        return phones;
     }
 
-    public void setPhone(PhoneRequest phone) {
-        this.phone = phone;
+    public void setPhones(Map<String, MobilePhoneRequest> phones) {
+        this.phones = phones;
     }
 }
