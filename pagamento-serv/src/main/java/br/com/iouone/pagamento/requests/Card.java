@@ -6,16 +6,18 @@ public class Card {
     private Integer exp_month;
     private Integer exp_year;
     private String holder_name;
+    private String cvv;
 
     public Card() {
     }
 
-    public Card(BillingAddress billing_address, String number, Integer exp_month, Integer exp_year, String holder_name) {
+    public Card(BillingAddress billing_address, String number, Integer exp_month, Integer exp_year, String holder_name, String cvv) {
         this.billing_address = billing_address;
         this.number = number;
         this.exp_month = exp_month;
         this.exp_year = exp_year;
         this.holder_name = holder_name;
+        this.cvv = cvv;
     }
 
     // Getters e Setters
@@ -57,5 +59,13 @@ public class Card {
 
     public void setHolder_name(String holder_name) {
         this.holder_name = holder_name;
+    }
+
+    public String getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
     }
 }

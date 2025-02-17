@@ -38,7 +38,7 @@ public class AssinaturaRequest {
         this.card = card;
         this.pricing_scheme = new PricingScheme("Unit",20);
         this.customer_id = customer_id;
-        this.items = List.of(new Item(new PricingScheme("Unit",97000),"Assinatura_Iouone",1,"IouOne_Pagamento_Assinatura"));
+        this.items = List.of(new Item(new PricingScheme("Unit",9700),"Assinatura_Iouone",1,"IouOne_Pagamento_Assinatura"));
     }
 
 
