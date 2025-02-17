@@ -74,6 +74,10 @@ public class AssinaturaServiceImpl implements AssinaturaService {
                 response.getBody().getId(), "month", LocalDateTime.now(),
                 response.getBody().getStatus(), buscaItemAssinatura(1)));
 
+        if(response.getBody().getStatus().equals("failed")) {
+            throw new RuntimeException("Pagamento Failed!");
+        }
+
 
         var meioPagamento = buscaOrdenadorPagamento(request.getFormaPagamento());
 
@@ -90,7 +94,7 @@ public class AssinaturaServiceImpl implements AssinaturaService {
         var endereco = new BillingAddress(dadosEndereco.getEndereco(), dadosEndereco.getEstado(),
                 "BR", dadosEndereco.getCidade(), dadosEndereco.getCep());
 
-        var card = new Card(endereco, request.getNumeroCartao(), Integer.parseInt(mes), Integer.parseInt(ano), request.getNomeCartao());
+        var card = new Card(endereco, request.getNumeroCartao(), Integer.parseInt(mes), Integer.parseInt(ano), request.getNomeCartao(), request.getCvv());
 
         return new AssinaturaRequest(request.getFormaPagamento(), card, dadosEndereco.getCustomerId());
 
